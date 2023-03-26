@@ -11,16 +11,18 @@ router.post('/signup', async (req, res) => {
     return res.send({ success: false, error: 'Send needed params' });
   }
 
+  const { email, password } = req.body;
+
   try {
-    const isEmailTaken = await User.findOne({ email: req.body.email });
+    const isEmailTaken = await User.findOne({ email });
 
     if (!!isEmailTaken) {
       return res.send({ success: false, error: 'User with such email already exist' });
     }
 
     const user = await User.create({
-      email: req.body.email,
-      password: Bcrypt.hashSync(req.body.password, 10)
+      email,
+      password: Bcrypt.hashSync(password, 10)
     });
 
     const token = JsonWebToken.sign({ id: user._id, email: user.email }, process.env.SECRET_JWT);
@@ -36,14 +38,16 @@ router.post('/login', async (req, res) => {
     return res.send({ success: false, error: 'Send needed params' });
   }
 
+  const { email, password } = req.body;
+
   try {
-    const user = await User.findOne({ email: req.body.email });
+    const user = await User.findOne({ email });
 
     if (!user) {
       return res.send({ success: false, error: 'No user wih such email was found' });
     }
 
-    const isPasswordValid = Bcrypt.compareSync(req.body.password, user.password);
+    const isPasswordValid = Bcrypt.compareSync(password, user.password);
 
     if (!isPasswordValid) {
       return res.send({ success: false, error: 'Invalid password' });

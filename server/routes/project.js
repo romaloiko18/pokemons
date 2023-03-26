@@ -16,25 +16,24 @@ router.get('', auth, async (req, res) => {
   }
 });
 
-router.post('', auth, async (req, res) => {
-  if (!req.body.name || !req.body.description) {
-    return res.send({ success: false, error: 'Send needed params' });
-  }
+router.get('/:id', auth, async (req, res) => {
+  if (!req.params.id) return res.send({ success: false, error: 'No parameters provided' });
+
+  const projectId = req.params.id;
+  const userId = req.body.userId;
 
   try {
-    const isNameTaken = await Project.findOne({ name: req.body.name });
+    const user = await User.findOne({ _id: userId });
 
-    if (!!isNameTaken) {
-      return res.send({ success: false, error: 'Given name is already taken' });
+    if (!user.projects.includes(projectId)) {
+      return res.send({ success: false, error: 'This user has no such project in contributions' });
     }
 
-    const project = await Project.create({
-      name: req.body.name,
-      description: req.body.description,
-      owners: [req.body.userId]
-    });
+    const project = await Project.findOne({ _id: projectId });
 
-    await User.findOneAndUpdate({ _id: req.body.userId }, { $push: { projects: req.body.userId } });
+    if (!project) {
+      return res.send({ success: false, error: 'No project was found' });
+    }
 
     return res.send({ success: true, data: project });
   } catch (error) {
@@ -47,19 +46,22 @@ router.post('', auth, async (req, res) => {
     return res.send({ success: false, error: 'Send needed params' });
   }
 
+  const { name, description, userId } = req.body;
+
   try {
-    const isNameTaken = await Project.findOne({ name: req.body.name });
+    const isNameTaken = await Project.findOne({ name });
 
     if (!!isNameTaken) {
-      return res.send({ success: false, error: 'Project with such name already exist' });
+      return res.send({ success: false, error: 'Given name is already taken' });
     }
 
     const project = await Project.create({
-      name: req.body.name,
-      description: req.body.description
+      name,
+      description,
+      contributors: [userId]
     });
 
-    await User.findOneAndUpdate({ _id: req.body.userId }, { $push: { projects: project._id } });
+    await User.findOneAndUpdate({ _id: userId }, { $push: { projects: project._id } });
 
     return res.send({ success: true, data: project });
   } catch (error) {
