@@ -11,6 +11,12 @@ const ProjectSchema = new Mongoose.Schema(
       type: String,
       required: true
     },
+    tickets: [
+      {
+        type: Mongoose.Types.ObjectId,
+        ref: 'Ticket'
+      }
+    ],
     contributors: [
       {
         type: Mongoose.Types.ObjectId,

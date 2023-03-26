@@ -12,12 +12,12 @@ router.get('', auth, async (req, res) => {
 
     return res.send({ success: true, data: projects });
   } catch (error) {
-    return res.send({ success: false, error });
+    return res.status(500).send({ success: false, error });
   }
 });
 
 router.get('/:id', auth, async (req, res) => {
-  if (!req.params.id) return res.send({ success: false, error: 'No parameters provided' });
+  if (!req.params.id) return res.status(404).send({ success: false, error: 'No parameters provided' });
 
   const projectId = req.params.id;
   const userId = req.body.userId;
@@ -26,24 +26,24 @@ router.get('/:id', auth, async (req, res) => {
     const user = await User.findOne({ _id: userId });
 
     if (!user.projects.includes(projectId)) {
-      return res.send({ success: false, error: 'This user has no such project in contributions' });
+      return res.status(404).send({ success: false, error: 'This user has no such project in contributions' });
     }
 
     const project = await Project.findOne({ _id: projectId });
 
     if (!project) {
-      return res.send({ success: false, error: 'No project was found' });
+      return res.status(404).send({ success: false, error: 'No project was found' });
     }
 
     return res.send({ success: true, data: project });
   } catch (error) {
-    return res.send({ success: false, error });
+    return res.status(500).send({ success: false, error });
   }
 });
 
 router.post('', auth, async (req, res) => {
   if (!req.body.name || !req.body.description) {
-    return res.send({ success: false, error: 'Send needed params' });
+    return res.status(404).send({ success: false, error: 'Send needed params' });
   }
 
   const { name, description, userId } = req.body;
@@ -52,7 +52,7 @@ router.post('', auth, async (req, res) => {
     const isNameTaken = await Project.findOne({ name });
 
     if (!!isNameTaken) {
-      return res.send({ success: false, error: 'Given name is already taken' });
+      return res.status(404).send({ success: false, error: 'Given name is already taken' });
     }
 
     const project = await Project.create({
@@ -63,9 +63,9 @@ router.post('', auth, async (req, res) => {
 
     await User.findOneAndUpdate({ _id: userId }, { $push: { projects: project._id } });
 
-    return res.send({ success: true, data: project });
+    return res.status(201).send({ success: true, data: project });
   } catch (error) {
-    return res.send({ success: false, error });
+    return res.status(500).send({ success: false, error });
   }
 });
 

@@ -8,7 +8,7 @@ require('dotenv').config();
 
 router.post('/signup', async (req, res) => {
   if (!req.body.email || !req.body.password) {
-    return res.send({ success: false, error: 'Send needed params' });
+    return res.status(404).send({ success: false, error: 'Send needed params' });
   }
 
   const { email, password } = req.body;
@@ -17,7 +17,7 @@ router.post('/signup', async (req, res) => {
     const isEmailTaken = await User.findOne({ email });
 
     if (!!isEmailTaken) {
-      return res.send({ success: false, error: 'User with such email already exist' });
+      return res.status(404).send({ success: false, error: 'User with such email already exist' });
     }
 
     const user = await User.create({
@@ -27,15 +27,15 @@ router.post('/signup', async (req, res) => {
 
     const token = JsonWebToken.sign({ id: user._id, email: user.email }, process.env.SECRET_JWT);
 
-    return res.send({ success: true, token });
+    return res.status(201).send({ success: true, token });
   } catch (error) {
-    return res.send({ success: false, error });
+    return res.status(500).send({ success: false, error });
   }
 });
 
 router.post('/login', async (req, res) => {
   if (!req.body.email || !req.body.password) {
-    return res.send({ success: false, error: 'Send needed params' });
+    return res.status(404).send({ success: false, error: 'Send needed params' });
   }
 
   const { email, password } = req.body;
@@ -44,20 +44,20 @@ router.post('/login', async (req, res) => {
     const user = await User.findOne({ email });
 
     if (!user) {
-      return res.send({ success: false, error: 'No user wih such email was found' });
+      return res.status(404).send({ success: false, error: 'No user wih such email was found' });
     }
 
     const isPasswordValid = Bcrypt.compareSync(password, user.password);
 
     if (!isPasswordValid) {
-      return res.send({ success: false, error: 'Invalid password' });
+      return res.status(404).send({ success: false, error: 'Invalid password' });
     }
 
     const token = JsonWebToken.sign({ id: user._id, email: user.email }, process.env.SECRET_JWT);
 
-    return res.send({ success: true, token });
+    return res.status(201).send({ success: true, token });
   } catch (error) {
-    return res.send({ success: false, error });
+    return res.status(500).send({ success: false, error });
   }
 });
 

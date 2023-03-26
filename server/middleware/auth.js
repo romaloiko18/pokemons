@@ -20,7 +20,7 @@ module.exports = async (req, res, next) => {
     if (!user) {
       res.status(401).json({ success: false, error: 'Unauthorized' });
     } else {
-      req.body.userId = user.id;
+      req.body = { ...req.body, userId: user.id };
       next();
     }
   } catch {

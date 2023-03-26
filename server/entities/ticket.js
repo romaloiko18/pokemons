@@ -3,11 +3,6 @@ const { STATUS, PROJECT_BLOCK } = require('../constants');
 
 const TicketSchema = new Mongoose.Schema(
   {
-    key: {
-      type: String,
-      unique: true,
-      required: true
-    },
     name: {
       type: String,
       required: true,
@@ -20,10 +15,6 @@ const TicketSchema = new Mongoose.Schema(
       type: String,
       enum: [STATUS.OPEN, STATUS.DONE, STATUS.TESTING, STATUS.DEPRECATED, STATUS.CODE_REVIEW, STATUS.IN_PROGRESS, STATUS.READY_FOR_TESTING],
       default: STATUS.OPEN
-    },
-    password: {
-      type: String,
-      required: true
     },
     projectBlock: {
       type: String,
