@@ -24,6 +24,10 @@ const TicketSchema = new Mongoose.Schema(
     project: {
       type: Mongoose.Types.ObjectId,
       ref: 'Project'
+    },
+    assignee: {
+      type: Mongoose.Types.ObjectId,
+      ref: 'User'
     }
   },
   { collection: 'tickets' }
