@@ -1,21 +1,20 @@
 import React from 'react';
-import { Nav, Navbar, Container } from 'react-bootstrap';
+import { Route, Routes } from 'react-router-dom';
+import Main from './pages/main';
+import SignIn from './pages/signin';
+import Signup from './pages/signup';
+import { useAuth } from './hooks/useAuth';
 
 function App() {
+  useAuth();
   return (
-    <>
-      <Navbar bg="primary" variant="dark">
-        <Container>
-          <Navbar.Brand href="#home">Navbar</Navbar.Brand>
-          <Nav className="me-auto">
-            <Nav.Link href="#home">Home</Nav.Link>
-            <Nav.Link href="#features">Features</Nav.Link>
-            <Nav.Link href="#pricing">Pricing</Nav.Link>
-          </Nav>
-        </Container>
-      </Navbar>
-      <Container>App</Container>
-    </>
+    <Routes>
+      <Route path="/" element={<Main />} />
+
+      <Route path="/signin" element={<SignIn />} />
+
+      <Route path="/signup" element={<Signup />} />
+    </Routes>
   );
 }
 

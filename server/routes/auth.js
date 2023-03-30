@@ -33,7 +33,7 @@ router.post('/signup', async (req, res) => {
   }
 });
 
-router.post('/login', async (req, res) => {
+router.post('/signin', async (req, res) => {
   if (!req.body.email || !req.body.password) {
     return res.status(404).send({ success: false, error: 'Send needed params' });
   }
