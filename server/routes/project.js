@@ -8,9 +8,12 @@ const auth = require('../middleware/auth');
 
 router.get('', auth, async (req, res) => {
   try {
-    const projects = await Project.find();
+    const projects = await Project.find().populate({
+      path: 'contributors tickets lead',
+      select: '_id email name description status projectBlock assignee'
+    });
 
-    return res.send({ success: true, data: projects });
+    return res.send({ success: true, projects });
   } catch (error) {
     return res.status(500).send({ success: false, error });
   }
@@ -58,7 +61,9 @@ router.post('', auth, async (req, res) => {
     const project = await Project.create({
       name,
       description,
-      contributors: [userId]
+      contributors: [userId],
+      lead: userId,
+      key: name.slice(0, 3).toUpperCase()
     });
 
     await User.findOneAndUpdate({ _id: userId }, { $push: { projects: project._id } });

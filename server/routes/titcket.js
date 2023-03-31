@@ -15,7 +15,7 @@ router.get('/:projectId', auth, async (req, res) => {
   try {
     const tickets = await Ticket.find({ project: projectId });
 
-    return res.send({ success: true, data: tickets });
+    return res.send({ success: true, tickets });
   } catch (error) {
     return res.status(500).send({ success: false, error });
   }
@@ -56,7 +56,7 @@ router.post('/:projectId', auth, async (req, res) => {
 
     await Project.findOneAndUpdate({ _id: projectId }, { $push: { tickets: ticket._id } });
 
-    return res.status(201).send({ success: true, data: ticket });
+    return res.status(201).send({ success: true, ticket });
   } catch (error) {
     return res.status(500).send({ success: false, error });
   }

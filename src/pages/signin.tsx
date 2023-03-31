@@ -3,6 +3,7 @@ import { MDBBtn, MDBContainer, MDBRow, MDBCol, MDBCard, MDBCardBody, MDBInput } 
 import { Link, useNavigate } from 'react-router-dom';
 import { http } from '../services/api';
 import { authService } from '../services/auth';
+import { useAuth } from '../hooks/useAuth';
 
 function SignIn() {
   const [email, setEmail] = useState('');
@@ -10,6 +11,7 @@ function SignIn() {
 
   const navigate = useNavigate();
 
+  useAuth('/');
   const handleSignIn = async (e: any) => {
     e.preventDefault();
 

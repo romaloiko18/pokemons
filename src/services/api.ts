@@ -41,12 +41,13 @@ export class ApiService {
   protected get headers(): { headers: { [key: string]: string } } {
     return {
       headers: {
-        Accept: 'application/json'
+        Accept: 'application/json',
+        Authorization: 'Bearer ' + authService.getToken()
       }
     };
   }
 
-  public async get<T extends { data: any }>(route: string, customHeaders?: AxiosRequestConfig) {
+  public async get<T extends Partial<T>>(route: string, customHeaders?: AxiosRequestConfig) {
     const url: string = this.getCurrentUrl(route);
 
     return await axios.get<T>(url, { ...this.headers, ...(customHeaders ?? {}) });
@@ -54,7 +55,6 @@ export class ApiService {
 
   public async post<T extends Partial<T>>(route: string, data: object, customHeaders = {}) {
     const url: string = this.getCurrentUrl(route);
-    console.log(url);
     return await axios.post<T>(url, data, {
       headers: { ...this.headers.headers, ...customHeaders }
     });

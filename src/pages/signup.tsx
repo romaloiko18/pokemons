@@ -3,12 +3,15 @@ import { MDBBtn, MDBContainer, MDBRow, MDBCol, MDBCard, MDBCardBody, MDBInput } 
 import { Link, useNavigate } from 'react-router-dom';
 import { http } from '../services/api';
 import { authService } from '../services/auth';
+import { useAuth } from '../hooks/useAuth';
 
 function SignUp() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const navigate = useNavigate();
+
+  useAuth('/');
 
   const handleSignUp = async (e: any) => {
     e.preventDefault();

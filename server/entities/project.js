@@ -7,6 +7,10 @@ const ProjectSchema = new Mongoose.Schema(
       required: true,
       unique: true
     },
+    key: {
+      type: String,
+      required: true
+    },
     description: {
       type: String,
       required: true
@@ -22,7 +26,11 @@ const ProjectSchema = new Mongoose.Schema(
         type: Mongoose.Types.ObjectId,
         ref: 'User'
       }
-    ]
+    ],
+    lead: {
+      type: Mongoose.Types.ObjectId,
+      ref: 'User'
+    }
   },
   { collection: 'projects' }
 );
