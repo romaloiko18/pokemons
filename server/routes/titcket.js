@@ -33,7 +33,7 @@ router.get('/:projectId/:ticketId', auth, async (req, res) => {
 
     if (!ticket) return res.status(404).send({ success: false, error: 'No ticket was found' });
 
-    return res.send({ success: true, data: ticket });
+    return res.send({ success: true, ticket });
   } catch (error) {
     return res.status(500).send({ success: false, error });
   }

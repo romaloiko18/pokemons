@@ -1,17 +1,22 @@
-import React, { FC } from 'react';
+import React, { FC, useContext } from 'react';
 import { Project } from '../types/project';
 import { MDBBadge, MDBBtn, MDBTable, MDBTableBody, MDBTableHead } from 'mdb-react-ui-kit';
 import '../styles/projects.css';
 import { useNavigate } from 'react-router-dom';
+import { useTickets } from '../context/ticket';
 
 type Props = {
   projects: Project[];
 };
 
 const ProjectList: FC<Props> = ({ projects }) => {
+  const { fetchTickets } = useTickets();
+
   const navigate = useNavigate();
 
-  const handleGoToProject = (id: string) => {
+  const handleGoToProject = async (id: string) => {
+    await fetchTickets(id);
+
     navigate(`/projects/${id}`);
   };
 

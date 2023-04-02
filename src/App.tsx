@@ -6,7 +6,8 @@ import Signup from './pages/signup';
 import { useAuth } from './hooks/useAuth';
 import Layout from './components/Layout';
 import Projects from './pages/projects';
-import Tickets from './pages/tickets';
+import Project from './pages/project';
+import Ticket from './pages/ticket';
 
 function App() {
   useAuth();
@@ -16,7 +17,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Main />} />
         <Route path="/projects" element={<Projects />} />
-        <Route path="/projects/:projectId" element={<Tickets />} />
+        <Route path="/projects/:projectId" element={<Project />} />
+        <Route path="/projects/:projectId/:ticketId" element={<Ticket />} />
 
         <Route path="/signin" element={<SignIn />} />
 

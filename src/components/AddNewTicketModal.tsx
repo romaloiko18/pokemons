@@ -1,28 +1,13 @@
-import React, { FC, useState } from 'react';
-import {
-  MDBBtn,
-  MDBModal,
-  MDBModalDialog,
-  MDBModalContent,
-  MDBModalHeader,
-  MDBModalTitle,
-  MDBModalBody,
-  MDBModalFooter,
-  MDBCard,
-  MDBCardBody,
-  MDBInput
-} from 'mdb-react-ui-kit';
-import { Link, useParams } from 'react-router-dom';
-import { http } from '../services/api';
-import { Ticket } from '../types/ticket';
+import React, { useState } from 'react';
+import { MDBBtn, MDBModal, MDBModalDialog, MDBModalContent, MDBCard, MDBCardBody, MDBInput } from 'mdb-react-ui-kit';
+import { useParams } from 'react-router-dom';
+import { useTickets } from '../context/ticket';
+import { useModal } from '../context/modal';
 
-type Props = {
-  isOpened: boolean;
-  setIsOpened: (condition: boolean) => void;
-  attachTicket: (ticket: Ticket) => void;
-};
+const AddNewTicketModal = () => {
+  const { addNewTicket } = useTickets();
+  const { isAddNewTicketModalOpened, setIsAddNewTicketModalOpened } = useModal();
 
-const AddNewTicketModal: FC<Props> = ({ isOpened, setIsOpened, attachTicket }) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
 
@@ -30,26 +15,25 @@ const AddNewTicketModal: FC<Props> = ({ isOpened, setIsOpened, attachTicket }) =
 
   const handleCreateTicket = async (e: any) => {
     if (!projectId) return;
-
     e.preventDefault();
 
-    const { data } = await http.post<{ ticket: Ticket; success: boolean }>(`/ticket/${projectId}`, { name, description });
+    await addNewTicket({ name, description }, projectId);
 
-    attachTicket(data.ticket);
+    setIsAddNewTicketModalOpened(false);
 
-    setIsOpened(false);
+    setName('');
+    setDescription('');
   };
 
   return (
     <>
-      <MDBModal show={isOpened} setShow={setIsOpened} tabIndex="-1">
+      <MDBModal show={isAddNewTicketModalOpened} setShow={setIsAddNewTicketModalOpened} tabIndex="-1">
         <MDBModalDialog>
           <MDBModalContent>
             <form onSubmit={handleCreateTicket}>
               <MDBCard className="bg-white my-5 mx-auto" style={{ borderRadius: '1rem', maxWidth: '500px' }}>
                 <MDBCardBody className="p-5 w-100 d-flex flex-column">
-                  <h2 className="fw-bold mb-2 text-center">Sign up</h2>
-                  <p className="text-white-50 mb-3">Please enter your login and password!</p>
+                  <h2 className="fw-bold mb-2 text-center">Create new ticket</h2>
 
                   <MDBInput
                     value={name}
