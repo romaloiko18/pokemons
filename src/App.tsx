@@ -8,24 +8,34 @@ import Layout from './components/Layout';
 import Projects from './pages/projects';
 import Project from './pages/project';
 import Ticket from './pages/ticket';
+import { authService } from './services/auth';
 
 function App() {
+  const isAuth = authService.getToken();
+
   useAuth();
 
   return (
-    <Layout>
-      <Routes>
-        <Route path="/" element={<Main />} />
-        <Route path="/projects" element={<Projects />} />
-        <Route path="/projects/:projectId" element={<Project />} />
-        <Route path="/projects/:projectId/:ticketId" element={<Ticket />} />
+    <>
+      {isAuth ? (
+        <Layout>
+          <Routes>
+            <Route path="/" element={<Main />} />
+            <Route path="/projects" element={<Projects />} />
+            <Route path="/projects/:projectId" element={<Project />} />
+            <Route path="/projects/:projectId/:ticketId" element={<Ticket />} />
 
-        <Route path="/signin" element={<SignIn />} />
+            <Route path="*" element={<div> Not found </div>} />
+          </Routes>
+        </Layout>
+      ) : (
+        <Routes>
+          <Route path="/signin" element={<SignIn />} />
 
-        <Route path="/signup" element={<Signup />} />
-        <Route path="*" element={<div> Not found </div>} />
-      </Routes>
-    </Layout>
+          <Route path="/signup" element={<Signup />} />
+        </Routes>
+      )}
+    </>
   );
 }
 

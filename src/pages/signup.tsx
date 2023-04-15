@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { MDBBtn, MDBContainer, MDBRow, MDBCol, MDBCard, MDBCardBody, MDBInput } from 'mdb-react-ui-kit';
+import { MDBContainer, MDBRow, MDBCol, MDBCard, MDBCardBody, MDBInput } from 'mdb-react-ui-kit';
 import { Link, useNavigate } from 'react-router-dom';
 import { http } from '../services/api';
 import { authService } from '../services/auth';
 import { useAuth } from '../hooks/useAuth';
+import { Button } from 'react-bootstrap';
 
 function SignUp() {
   const [email, setEmail] = useState('');
@@ -30,6 +31,7 @@ function SignUp() {
             <MDBCard className="bg-white my-5 mx-auto" style={{ borderRadius: '1rem', maxWidth: '500px' }}>
               <MDBCardBody className="p-5 w-100 d-flex flex-column">
                 <h2 className="fw-bold mb-2 text-center">Sign up</h2>
+
                 <p className="text-white-50 mb-3">Please enter your login and password!</p>
 
                 <MDBInput
@@ -50,12 +52,13 @@ function SignUp() {
                   type="password"
                   size="lg"
                 />
-                <MDBBtn type="submit">Sign Up</MDBBtn>
+
+                <Button type="submit">Sign Up</Button>
 
                 <hr className="my-4" />
 
                 <Link to="/signin">
-                  <MDBBtn className="w-100">Sign in</MDBBtn>
+                  <Button className="w-100">Sign in</Button>
                 </Link>
               </MDBCardBody>
             </MDBCard>

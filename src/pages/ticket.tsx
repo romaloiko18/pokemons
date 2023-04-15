@@ -1,11 +1,12 @@
 import React from 'react';
-import UpdateTicketForm from '../components/UpdateTicketForm';
+import UpdateTicket from '../components/UpdateTicket/UpdateTicket';
+import { TicketContextProvider } from '../context/ticket';
 
 const Ticket = () => {
   return (
-    <div>
-      <UpdateTicketForm />
-    </div>
+    <TicketContextProvider>
+      <UpdateTicket />
+    </TicketContextProvider>
   );
 };
 

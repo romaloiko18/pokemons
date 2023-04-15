@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { http } from '../services/api';
 import { authService } from '../services/auth';
 import { useAuth } from '../hooks/useAuth';
+import { Button } from 'react-bootstrap';
 
 function SignIn() {
   const [email, setEmail] = useState('');
@@ -29,6 +30,7 @@ function SignIn() {
             <MDBCard className="bg-white my-5 mx-auto" style={{ borderRadius: '1rem', maxWidth: '500px' }}>
               <MDBCardBody className="p-5 w-100 d-flex flex-column">
                 <h2 className="fw-bold mb-2 text-center">Sign in</h2>
+
                 <p className="text-white-50 mb-3">Please enter your login and password!</p>
 
                 <MDBInput
@@ -36,28 +38,31 @@ function SignIn() {
                   onChange={(e) => setEmail(e.target.value)}
                   wrapperClass="mb-4 w-100"
                   label="Email address"
-                  id="formControlLg"
+                  id="email"
                   type="email"
                   size="lg"
                 />
+
                 <MDBInput
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   wrapperClass="mb-4 w-100"
                   label="Password"
-                  id="formControlLg"
+                  id="password"
                   type="password"
                   size="lg"
                 />
 
-                <MDBBtn size="lg">Login</MDBBtn>
+                <Button size="lg" type="submit">
+                  Login
+                </Button>
 
                 <hr className="my-4" />
 
                 <Link to="/signup">
-                  <MDBBtn className="mb-2 w-100" size="lg">
+                  <Button className="mb-2 w-100" size="lg">
                     Sign up
-                  </MDBBtn>
+                  </Button>
                 </Link>
               </MDBCardBody>
             </MDBCard>

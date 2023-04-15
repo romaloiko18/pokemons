@@ -66,39 +66,13 @@ router.patch('/:projectId/:ticketId', auth, async (req, res) => {
   if (!req.body || !req.params) return res.status(404).send({ success: false, error: 'No parameters provided' });
 
   const { projectId, ticketId } = req.params;
-  const { userId, name, description } = req.body;
+  const { name, description, status } = req.body;
 
+  console.log(projectId);
   try {
-    const user = await User.findOne({ _id: userId });
+    const ticket = await Ticket.findOneAndUpdate({ project: projectId, _id: ticketId }, { name, description, status }, { new: true });
 
-    if (!user.projects.includes(projectId)) {
-      return res.send({ success: false, error: 'This user has no such project in contributions' });
-    }
-
-    const ticket = await Ticket.findOneAndUpdate({ project: projectId, _id: ticketId }, { name, description }, { new: true });
-
-    return res.status(201).send({ success: true, data: ticket });
-  } catch (error) {
-    return res.status(500).send({ success: false, error });
-  }
-});
-
-router.patch('/:projectId/:ticketId', auth, async (req, res) => {
-  if (!req.body || !req.params) return res.status(404).send({ success: false, error: 'No parameters provided' });
-
-  const { projectId, ticketId } = req.params;
-  const { userId, name, description } = req.body;
-
-  try {
-    const user = await User.findOne({ _id: userId });
-
-    if (!user.projects.includes(projectId)) {
-      return res.send({ success: false, error: 'This user has no such project in contributions' });
-    }
-
-    const ticket = await Ticket.findOneAndUpdate({ project: projectId, _id: ticketId }, { name, description }, { new: true });
-
-    return res.status(201).send({ success: true, data: ticket });
+    return res.status(201).send({ success: true, ticket });
   } catch (error) {
     return res.status(500).send({ success: false, error });
   }

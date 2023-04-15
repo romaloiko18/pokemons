@@ -66,7 +66,7 @@ export class ApiService {
     return await axios.put(url, data, this.headers);
   }
 
-  public async patch(route: string, data: object) {
+  public async patch<T extends Partial<T>>(route: string, data: object) {
     const url: string = this.getCurrentUrl(route);
 
     return await axios.patch(url, data, this.headers);
