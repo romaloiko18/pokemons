@@ -23,22 +23,18 @@ router.get('/:id', auth, async (req, res) => {
   if (!req.params.id) return res.status(404).send({ success: false, error: 'No parameters provided' });
 
   const projectId = req.params.id;
-  const userId = req.body.userId;
 
   try {
-    const user = await User.findOne({ _id: userId });
-
-    if (!user.projects.includes(projectId)) {
-      return res.status(404).send({ success: false, error: 'This user has no such project in contributions' });
-    }
-
-    const project = await Project.findOne({ _id: projectId });
+    const project = await Project.findOne({ _id: projectId }).populate({
+      path: 'contributors tickets lead',
+      select: '_id email name description status projectBlock assignee'
+    });
 
     if (!project) {
       return res.status(404).send({ success: false, error: 'No project was found' });
     }
 
-    return res.send({ success: true, data: project });
+    return res.send({ success: true, project });
   } catch (error) {
     return res.status(500).send({ success: false, error });
   }
@@ -68,9 +64,47 @@ router.post('', auth, async (req, res) => {
 
     await User.findOneAndUpdate({ _id: userId }, { $push: { projects: project._id } });
 
-    return res.status(201).send({ success: true, data: project });
+    return res.status(201).send({ success: true, project });
   } catch (error) {
     return res.status(500).send({ success: false, error });
+  }
+});
+
+router.post('/:id/team', auth, async (req, res) => {
+  if (!req.body.email || !req.params.id) {
+    return res.status(404).send({ success: false, error: 'Send needed params' });
+  }
+
+  const email = req.body.email;
+  const projectId = req.params.id;
+
+  try {
+    const userToAttach = await User.findOne({ email });
+
+    if (!userToAttach) {
+      return res.status(404).send({ success: false, error: 'No user found' });
+    }
+
+    const project = await Project.findOne({ _id: projectId });
+
+    if (!project) {
+      return res.status(404).send({ success: false, error: 'No project found' });
+    }
+
+    if (project.contributors.includes(userToAttach._id)) {
+      return res.status(404).send({ success: false, error: 'User is attached already' });
+    }
+
+    await project.update({ $push: { contributors: userToAttach._id } });
+
+    const result = await Project.findOne({ _id: projectId }).populate({
+      path: 'contributors tickets lead',
+      select: '_id email name description status projectBlock assignee'
+    });
+
+    return res.status(200).send({ success: true, project: result });
+  } catch (error) {
+    return res.status(500).send({ success: false, error: error.message });
   }
 });
 

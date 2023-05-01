@@ -1,5 +1,5 @@
-import React from 'react';
-import { Route, Routes } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Route, Routes, useParams } from 'react-router-dom';
 import Main from './pages/main';
 import SignIn from './pages/signin';
 import Signup from './pages/signup';
@@ -9,6 +9,7 @@ import Projects from './pages/projects';
 import Project from './pages/project';
 import Ticket from './pages/ticket';
 import { authService } from './services/auth';
+import { useProjects } from './context/project';
 
 function App() {
   const isAuth = authService.getToken();

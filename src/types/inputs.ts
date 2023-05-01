@@ -2,7 +2,7 @@ import { Color } from 'react-bootstrap/types';
 import { TicketStatus } from '../constants/ticket';
 
 export type SelectOption = {
-  value: number;
+  value: number | string;
   name: string;
 };
 

@@ -1,6 +1,6 @@
-import React, { FC, useContext } from 'react';
+import React, { FC } from 'react';
 import { Project } from '../types/project';
-import { MDBBadge, MDBBtn, MDBTable, MDBTableBody, MDBTableHead } from 'mdb-react-ui-kit';
+import { MDBTable, MDBTableBody, MDBTableHead } from 'mdb-react-ui-kit';
 import '../styles/projects.css';
 import { useNavigate } from 'react-router-dom';
 import { useTickets } from '../context/ticket';
@@ -25,8 +25,11 @@ const ProjectList: FC<Props> = ({ projects }) => {
       <MDBTableHead>
         <tr>
           <th scope="col">Name</th>
+
           <th scope="col">Key</th>
+
           <th scope="col"># of tickets</th>
+
           <th scope="col">Lead</th>
         </tr>
       </MDBTableHead>
@@ -36,8 +39,11 @@ const ProjectList: FC<Props> = ({ projects }) => {
             <td>
               <p className="text-muted mb-0">{name}</p>
             </td>
+
             <td>{key}</td>
+
             <td>{tickets?.length || 0}</td>
+
             <td>{contributors.at(0)?.email || ''}</td>
           </tr>
         ))}

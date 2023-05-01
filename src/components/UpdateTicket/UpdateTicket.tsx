@@ -3,7 +3,7 @@ import { useTickets } from '../../context/ticket';
 import { useParams } from 'react-router-dom';
 import { Badge, Button, Card } from 'react-bootstrap';
 import { STATUS_SELECT_OPTIONS, TicketStatus } from '../../constants/ticket';
-import StatusSelect from './Select';
+import StatusSelect from './StatusSelect';
 import UpdateTicketFormModal from './UpdateTicketFormModal';
 import { useModal } from '../../context/modal';
 import { StatusSelectOption } from '../../types/inputs';
@@ -14,11 +14,12 @@ const getCurrentValue = (ticketStatus: TicketStatus = TicketStatus.OPEN) =>
 const UpdateTicket = () => {
   const { fetchTicket, currentTicket, updateTicket } = useTickets();
   const { setIsUpdateTicketModalOpened } = useModal();
-  const selectedStatus = useMemo(() => getCurrentValue(currentTicket?.status), [currentTicket]);
 
   const [isUpdating, setIsUpdating] = useState(false);
 
   const { projectId, ticketId } = useParams();
+
+  const selectedStatus = useMemo(() => getCurrentValue(currentTicket?.status), [currentTicket]);
 
   const handleUpdateStatus = async (option: StatusSelectOption) => {
     try {
@@ -44,9 +45,16 @@ const UpdateTicket = () => {
             <Badge bg="" text="dark">
               Status
             </Badge>
+
             <div className="d-flex gap-1">
               <StatusSelect value={selectedStatus} options={STATUS_SELECT_OPTIONS} onSelect={handleUpdateStatus} disabled={isUpdating} />
             </div>
+
+            <hr />
+
+            <Badge bg="" text="dark">
+              {`Assignee : ${currentTicket.assignee?.email ?? 'No assignee'}`}
+            </Badge>
 
             <hr />
 

@@ -1,7 +1,14 @@
 import React, { FC, PropsWithChildren } from 'react';
-import { Container, Nav, Navbar } from 'react-bootstrap';
+import { Button, Container, Nav, Navbar } from 'react-bootstrap';
+import { useProjects } from '../context/project';
+import { useModal } from '../context/modal';
 
 const Layout: FC<PropsWithChildren> = ({ children }) => {
+  const { currentProject } = useProjects();
+  const { setIsTeamModalOpened } = useModal();
+
+  const showTeam = !!currentProject?.contributors;
+
   return (
     <>
       <Navbar bg="primary" variant="dark">
@@ -10,8 +17,14 @@ const Layout: FC<PropsWithChildren> = ({ children }) => {
 
           <Nav className="me-auto">
             <Nav.Link href="/projects">Projects</Nav.Link>
+
             <Nav.Link href="/about">About</Nav.Link>
-            <Nav.Link href="/team">Team</Nav.Link>
+
+            {showTeam && (
+              <Button variant="primary" onClick={() => setIsTeamModalOpened(true)}>
+                Team
+              </Button>
+            )}
           </Nav>
         </Container>
       </Navbar>

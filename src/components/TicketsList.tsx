@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { MDBTable, MDBTableBody, MDBTableHead } from 'mdb-react-ui-kit';
 import { useTickets } from '../context/ticket';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -31,7 +31,9 @@ const TicketsList = () => {
           <MDBTableHead>
             <tr>
               <th scope="col">Name</th>
+
               <th scope="col">Status</th>
+
               <th scope="col">Assignee</th>
             </tr>
           </MDBTableHead>
@@ -43,7 +45,9 @@ const TicketsList = () => {
                   <td>
                     <p className="text-muted mb-0">{name}</p>
                   </td>
+
                   <td>{status}</td>
+
                   <td>{assignee?.email ?? 'unassigned'}</td>
                 </tr>
               ))}

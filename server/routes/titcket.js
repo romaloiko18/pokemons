@@ -13,7 +13,10 @@ router.get('/:projectId', auth, async (req, res) => {
   if (!projectId) return res.status(404).send({ success: false, error: 'No parameters provided' });
 
   try {
-    const tickets = await Ticket.find({ project: projectId });
+    const tickets = await Ticket.find({ project: projectId }).populate({
+      path: 'assignee',
+      select: '_id email name description status'
+    });
 
     return res.send({ success: true, tickets });
   } catch (error) {
@@ -30,7 +33,6 @@ router.get('/:projectId/:ticketId', auth, async (req, res) => {
     if (!projectId || !ticketId) return res.status(404).send({ success: false, error: 'No parameters provided' });
 
     const ticket = await Ticket.findOne({ _id: ticketId, project: projectId });
-
     if (!ticket) return res.status(404).send({ success: false, error: 'No ticket was found' });
 
     return res.send({ success: true, ticket });
@@ -66,11 +68,15 @@ router.patch('/:projectId/:ticketId', auth, async (req, res) => {
   if (!req.body || !req.params) return res.status(404).send({ success: false, error: 'No parameters provided' });
 
   const { projectId, ticketId } = req.params;
-  const { name, description, status } = req.body;
+  const { name, description, status, assignee } = req.body;
 
-  console.log(projectId);
   try {
-    const ticket = await Ticket.findOneAndUpdate({ project: projectId, _id: ticketId }, { name, description, status }, { new: true });
+    await Ticket.findOneAndUpdate({ project: projectId, _id: ticketId }, { name, description, status, assignee }, { new: true });
+
+    const ticket = await Ticket.findOne({ project: projectId, _id: ticketId }).populate({
+      path: 'assignee',
+      select: '_id email name description status'
+    });
 
     return res.status(201).send({ success: true, ticket });
   } catch (error) {

@@ -5,9 +5,21 @@ import { TicketContextProvider } from '../context/ticket';
 import { useModal } from '../context/modal';
 import TicketsList from '../components/TicketsList';
 import AddNewTicketModal from '../components/AddNewTicketModal';
+import { useProjects } from '../context/project';
+import { useParams } from 'react-router-dom';
+import TeamModal from '../components/TeamModal/TeamModal';
 
 function Project() {
   const { setIsAddNewTicketModalOpened } = useModal();
+  const { fetchProject, currentProject } = useProjects();
+
+  const { projectId } = useParams();
+
+  useEffect(() => {
+    if (!projectId) return;
+
+    fetchProject(projectId);
+  }, []);
 
   return (
     <TicketContextProvider>
@@ -19,6 +31,8 @@ function Project() {
       </Container>
 
       <AddNewTicketModal />
+
+      <TeamModal />
     </TicketContextProvider>
   );
 }

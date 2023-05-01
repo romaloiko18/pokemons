@@ -9,7 +9,7 @@ type TicketsContext = {
   fetchTicket: (projectId: string, ticketId: string) => Promise<void>;
   currentTicket: Ticket | null;
   addNewTicket: (values: { name?: string; description?: string }, projectId?: string) => Promise<void>;
-  updateTicket: (values: { status?: string; description?: string; name?: string }, projectId?: string) => Promise<void>;
+  updateTicket: (values: { status?: string; description?: string; name?: string; assignee?: string | number }, projectId?: string) => Promise<void>;
   isError: boolean;
   isLoading: boolean;
 };
@@ -21,7 +21,7 @@ const defaultValue: TicketsContext = {
   fetchTickets: async (projectId: string) => {},
   fetchTicket: async (projectId: string, ticketId: string) => {},
   addNewTicket: async (values: { name?: string; description?: string }, projectId?: string) => {},
-  updateTicket: async (values: { status?: string; description?: string; name?: string }, projectId?: string) => {},
+  updateTicket: async (values: { status?: string; description?: string; name?: string; assignee?: number | string }, projectId?: string) => {},
 
   isError: false,
   isLoading: false
@@ -71,7 +71,7 @@ export const TicketContextProvider: FC<PropsWithChildren> = ({ children }) => {
     });
   };
 
-  const updateTicket = async (values: { status?: string; description?: string; name?: string }, projectId?: string) => {
+  const updateTicket = async (values: { status?: string; description?: string; name?: string; assignee?: string | number }, projectId?: string) => {
     await handleAsyncCallback(async () => {
       if (!currentTicket || !projectId) return;
       const { data } = await http.patch<{ ticket: Ticket; success: boolean }>(`/ticket/${projectId}/${currentTicket?._id}`, values);
