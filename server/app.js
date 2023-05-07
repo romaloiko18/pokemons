@@ -17,9 +17,9 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/auth', AuthRoute);
-app.use('/user', UserRoute);
 app.use('/project', ProjectRoute);
 app.use('/ticket', TicketRoute);
+app.use('/profile', UserRoute);
 
 app.get('/app', (req, res) => {
   res.json({ success: true, message: 'Success' });

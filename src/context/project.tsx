@@ -1,7 +1,5 @@
 import { createContext, FC, PropsWithChildren, useContext, useState } from 'react';
 import { http } from '../services/api';
-import { Ticket } from '../types/ticket';
-import ticket from '../pages/ticket';
 import { Project } from '../types/project';
 
 type ProjectsContext = {
@@ -9,7 +7,7 @@ type ProjectsContext = {
   fetchProjects: () => Promise<void>;
   fetchProject: (projectId: string) => Promise<void>;
   currentProject: Project | null;
-  addNewProject: (values: { name?: string; description?: string }, projectId?: string) => Promise<void>;
+  addNewProject: (values: { name?: string; description?: string }) => Promise<void>;
   updateProject: (values: { status?: string; description?: string; name?: string }, projectId?: string) => Promise<void>;
   addNewContributor: (values: { email: string }) => Promise<void>;
   isError: boolean;
@@ -69,9 +67,7 @@ export const ProjectContextProvider: FC<PropsWithChildren> = ({ children }) => {
 
   const addNewProject = async (values: { name?: string; description?: string }) => {
     await handleAsyncCallback(async () => {
-      if (!currentProject) return;
-
-      const { data } = await http.post<{ project: Project; success: boolean }>(`/project/${currentProject._id}`, values);
+      const { data } = await http.post<{ project: Project; success: boolean }>(`/project`, values);
 
       setProjects((prevState) => [...prevState, data.project]);
     });
@@ -81,7 +77,7 @@ export const ProjectContextProvider: FC<PropsWithChildren> = ({ children }) => {
     await handleAsyncCallback(async () => {
       if (!currentProject) return;
 
-      const { data } = await http.patch<{ project: Project; success: boolean }>(`/project/${currentProject._id}`, values);
+      const { data } = await http.patch<{ project: Project; success: boolean; error?: string }>(`/project/${currentProject._id}`, values);
 
       setCurrentProject(data.ticket);
     });

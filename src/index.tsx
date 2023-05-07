@@ -3,18 +3,21 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter } from 'react-router-dom';
-import { ModalContextProvider } from './context/modal';
-import { ProjectContextProvider } from './context/project';
+import AppContext from './context';
+import { CustomErrorBoundary } from './components/ErrorBoundary';
+import '../src/styles/projects.css';
+import 'react-toastify/ReactToastify.min.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
+
 root.render(
-  <ProjectContextProvider>
-    <ModalContextProvider>
-      <BrowserRouter>
+  <AppContext>
+    <BrowserRouter>
+      <CustomErrorBoundary>
         <React.StrictMode>
           <App />
         </React.StrictMode>
-      </BrowserRouter>
-    </ModalContextProvider>
-  </ProjectContextProvider>
+      </CustomErrorBoundary>
+    </BrowserRouter>
+  </AppContext>
 );

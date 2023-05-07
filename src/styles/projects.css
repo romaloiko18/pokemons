@@ -5,3 +5,25 @@
     background: #FFFDee;
     cursor: pointer;
 }
+
+div > .carousel-indicators {
+    bottom: -50px;
+}
+
+:root {
+    --toastify-color-dark: #434b65 !important;
+    --toastify-color-light: #7b8093 !important;
+    --toastify-color-success: #35b26f !important;
+    --toastify-color-error: #ff9292 !important;
+    --toastify-color-info: #559be6 !important;
+    --toastify-color-warning: #f2b02e !important;
+
+    --toastify-color-progress-dark: #559be6 !important;
+
+    --toastify-text-color-light: #434a65 !important;
+    --toastify-text-color-dark: #f8f8f8 !important;
+    --toastify-text-color-info: #f8f8f8 !important;
+    --toastify-text-color-success: #f8f8f8 !important;
+    --toastify-text-color-warning: #f8f8f8 !important;
+    --toastify-text-color-error: #f8f8f8 !important;
+}

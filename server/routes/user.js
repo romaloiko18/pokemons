@@ -6,7 +6,7 @@ require('dotenv').config();
 
 const User = require('../entities/user');
 
-router.get('/profile', auth, async (req, res) => {
+router.get('', auth, async (req, res) => {
   const userId = req.body.userId;
 
   try {
@@ -14,7 +14,7 @@ router.get('/profile', auth, async (req, res) => {
 
     if (!user) return res.status(404).send({ success: false, error: 'No user with such id was found' });
 
-    return res.send({ success: true, data: new UserProfileDto(user) });
+    return res.send({ success: true, user: new UserProfileDto(user) });
   } catch (error) {
     return res.send({ success: false, error });
   }

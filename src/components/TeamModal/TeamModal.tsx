@@ -5,6 +5,7 @@ import { Button } from 'react-bootstrap';
 import { useProjects } from '../../context/project';
 import { SelectOption } from '../../types/inputs';
 import Select from '../Select';
+import CloseButton from 'react-bootstrap/CloseButton';
 
 const TeamModal = () => {
   const { setIsTeamModalOpened, isTeamModalOpened } = useModal();
@@ -32,6 +33,10 @@ const TeamModal = () => {
       <MDBModal show={isTeamModalOpened} setShow={setIsTeamModalOpened}>
         <MDBCard className="bg-white my-5 mx-auto" style={{ borderRadius: '1rem', maxWidth: '500px' }}>
           <MDBCardBody className="p-5 w-100 d-flex flex-column">
+            <div className="d-flex justify-content-end">
+              <CloseButton onClick={() => setIsTeamModalOpened(false)} />
+            </div>
+
             <div className="d-flex g-1">
               <MDBInput
                 value={email}

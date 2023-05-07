@@ -4,23 +4,21 @@ import { useParams } from 'react-router-dom';
 import { useTickets } from '../context/ticket';
 import { useModal } from '../context/modal';
 import CloseButton from 'react-bootstrap/CloseButton';
+import { useProjects } from '../context/project';
 
-const AddNewTicketModal = () => {
-  const { addNewTicket } = useTickets();
-  const { isAddNewTicketModalOpened, setIsAddNewTicketModalOpened } = useModal();
+const AddNewProjectModal = () => {
+  const { addNewProject } = useProjects();
+  const { isAddNewProjectModalOpened, setIsAddNewProjectModalOpened } = useModal();
 
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
 
-  const { projectId } = useParams();
-
-  const handleCreateTicket = async (e: any) => {
-    if (!projectId) return;
+  const handleCreateProject = async (e: any) => {
     e.preventDefault();
 
-    await addNewTicket({ name, description }, projectId);
+    await addNewProject({ name, description });
 
-    setIsAddNewTicketModalOpened(false);
+    setIsAddNewProjectModalOpened(false);
 
     setName('');
     setDescription('');
@@ -28,15 +26,15 @@ const AddNewTicketModal = () => {
 
   return (
     <>
-      <MDBModal show={isAddNewTicketModalOpened} setShow={setIsAddNewTicketModalOpened} tabIndex="-1">
-        <form onSubmit={handleCreateTicket}>
+      <MDBModal show={isAddNewProjectModalOpened} setShow={setIsAddNewProjectModalOpened} tabIndex="-1">
+        <form onSubmit={handleCreateProject}>
           <MDBCard className="bg-white my-5 mx-auto" style={{ borderRadius: '1rem', maxWidth: '500px' }}>
             <MDBCardBody className="p-5 w-100 d-flex flex-column">
               <div className="d-flex justify-content-end">
-                <CloseButton onClick={() => setIsAddNewTicketModalOpened(false)} />
+                <CloseButton onClick={() => setIsAddNewProjectModalOpened(false)} />
               </div>
 
-              <h2 className="fw-bold mb-2 text-center">Create new ticket</h2>
+              <h2 className="fw-bold mb-2 text-center">Create new project</h2>
 
               <MDBInput
                 value={name}
@@ -67,4 +65,4 @@ const AddNewTicketModal = () => {
   );
 };
 
-export default AddNewTicketModal;
+export default AddNewProjectModal;

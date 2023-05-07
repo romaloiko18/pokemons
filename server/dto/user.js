@@ -1,7 +1,8 @@
 class UserProfileDto {
-  constructor({ email, _id }) {
+  constructor({ email, _id, projects }) {
     this.email = email;
-    this.id = _id;
+    this._id = _id;
+    this.projects = projects;
   }
 }
 

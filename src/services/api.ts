@@ -1,6 +1,7 @@
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 
 import { authService } from './auth';
+import { toast } from 'react-toastify';
 
 axios.interceptors.response.use(
   (res) => res,
@@ -9,18 +10,19 @@ axios.interceptors.response.use(
       if (error.response) {
         const { status, data } = error.response as {
           status: number;
-          data: { [key: string]: string | object };
+          data: { error: string };
         };
 
-        if (status === 401 && data?.message === 'Unauthenticated.') {
+        if (status === 401) {
           authService.removeToken();
           window.location.replace('/app/login');
+          toast('Unauthenticated');
         }
+        console.log('toast');
+        toast(data.error);
 
         return Promise.reject(error.response.data);
       }
-
-      console.log(error);
 
       return Promise.reject(error);
     } catch (error) {

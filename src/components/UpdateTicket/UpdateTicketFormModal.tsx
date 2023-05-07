@@ -7,6 +7,7 @@ import { Button } from 'react-bootstrap';
 import { SelectOption } from '../../types/inputs';
 import { useProjects } from '../../context/project';
 import Select from '../Select';
+import CloseButton from 'react-bootstrap/CloseButton';
 
 const NO_ASSIGNEE = 'No assigned user';
 
@@ -60,13 +61,16 @@ const UpdateTicketFormModal = () => {
     fetchTicket(projectId, ticketId);
   }, []);
 
-  console.log(selectedOption);
   return (
     <>
       <MDBModal show={isUpdateTicketModalOpened} setShow={setIsUpdateTicketModalOpened} tabIndex="-1">
         <form onSubmit={handleUpdateTicket}>
           <MDBCard className="bg-white my-5 mx-auto" style={{ borderRadius: '1rem', maxWidth: '500px' }}>
             <MDBCardBody className="p-5 w-100 d-flex flex-column">
+              <div className="d-flex justify-content-end">
+                <CloseButton onClick={() => setIsUpdateTicketModalOpened(false)} />
+              </div>
+
               <h2 className="fw-bold mb-2 text-center">Create new ticket</h2>
 
               <Select onSelect={setSelectedOption} value={selectedOption} options={selectOptions} />

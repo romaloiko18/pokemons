@@ -12,8 +12,6 @@ function SignUp() {
 
   const navigate = useNavigate();
 
-  useAuth('/');
-
   const handleSignUp = async (e: any) => {
     e.preventDefault();
 

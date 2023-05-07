@@ -8,7 +8,7 @@ const auth = require('../middleware/auth');
 
 router.get('', auth, async (req, res) => {
   try {
-    const projects = await Project.find().populate({
+    const projects = await Project.find({ contributors: req.body.userId }).populate({
       path: 'contributors tickets lead',
       select: '_id email name description status projectBlock assignee'
     });

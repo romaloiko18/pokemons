@@ -1,12 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MDBTable, MDBTableBody, MDBTableHead } from 'mdb-react-ui-kit';
 import { useTickets } from '../context/ticket';
 import { useNavigate, useParams } from 'react-router-dom';
 import Spinner from './Spinner';
 
 const TicketsList = () => {
-  const { tickets, isLoading, fetchTickets } = useTickets();
-
+  const { tickets, isLoading, fetchTickets, fetchTicket } = useTickets();
   const navigate = useNavigate();
   const { projectId } = useParams();
 
@@ -14,6 +13,14 @@ const TicketsList = () => {
     if (!id || !projectId) return;
 
     navigate(`/projects/${projectId}/${id}`, { state: '_blank' });
+  };
+
+  const setShowSideViewTicket = async (ticketId: string) => {
+    if (!ticketId || !projectId) return;
+
+    await fetchTicket(projectId, ticketId);
+
+    navigate(`/projects/${projectId}?openedSideViewTicket=${ticketId}`);
   };
 
   useEffect(() => {
@@ -41,7 +48,7 @@ const TicketsList = () => {
           {!!tickets.length ? (
             <MDBTableBody>
               {tickets.map(({ status, assignee, name, description, _id }) => (
-                <tr key={_id} className="project-table-row" onClick={() => handleOpenTicket(_id)}>
+                <tr key={_id} className="project-table-row" onClick={() => setShowSideViewTicket(_id)}>
                   <td>
                     <p className="text-muted mb-0">{name}</p>
                   </td>
@@ -53,7 +60,7 @@ const TicketsList = () => {
               ))}
             </MDBTableBody>
           ) : (
-            <h3 className="d-flex pt-4">No tickets kurwa</h3>
+            <h3 className="d-flex pt-4">No tickets were found</h3>
           )}
         </>
       )}

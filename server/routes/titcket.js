@@ -32,7 +32,8 @@ router.get('/:projectId/:ticketId', auth, async (req, res) => {
   try {
     if (!projectId || !ticketId) return res.status(404).send({ success: false, error: 'No parameters provided' });
 
-    const ticket = await Ticket.findOne({ _id: ticketId, project: projectId });
+    const ticket = await Ticket.findOne({ _id: ticketId, project: projectId }).populate('comments.user');
+
     if (!ticket) return res.status(404).send({ success: false, error: 'No ticket was found' });
 
     return res.send({ success: true, ticket });
@@ -74,13 +75,14 @@ router.patch('/:projectId/:ticketId', auth, async (req, res) => {
     await Ticket.findOneAndUpdate({ project: projectId, _id: ticketId }, { name, description, status, assignee }, { new: true });
 
     const ticket = await Ticket.findOne({ project: projectId, _id: ticketId }).populate({
-      path: 'assignee',
-      select: '_id email name description status'
+      path: 'assignee, comments',
+      select: '_id email name description status',
+      strictPopulate: false
     });
 
     return res.status(201).send({ success: true, ticket });
   } catch (error) {
-    return res.status(500).send({ success: false, error });
+    return res.status(500).send({ success: false, error: error.message });
   }
 });
 
@@ -114,6 +116,37 @@ router.patch('/assign/:projectId/:ticketId', auth, async (req, res) => {
     return res.status(201).send({ success: true, data: ticket });
   } catch (error) {
     return res.status(500).send({ success: false, error });
+  }
+});
+
+router.patch('/comment/:projectId/:ticketId', auth, async (req, res) => {
+  if (!req.body || !req.params) return res.status(404).send({ success: false, error: 'No parameters provided' });
+
+  const { projectId, ticketId } = req.params;
+  const { content, user } = req.body;
+
+  if (!content || !user) {
+    return res.status(404).send({ success: false, error: 'No parameters provided' });
+  }
+
+  try {
+    await Ticket.findOneAndUpdate(
+      { project: projectId, _id: ticketId },
+      {
+        $push: {
+          comments: {
+            user,
+            content
+          }
+        }
+      }
+    );
+
+    const ticket = await Ticket.findOne({ project: projectId, _id: ticketId }).populate('comments.user');
+
+    return res.status(201).send({ success: true, ticket });
+  } catch (error) {
+    return res.status(500).send({ success: false, error: error.message });
   }
 });
 
