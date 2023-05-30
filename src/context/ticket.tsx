@@ -84,9 +84,8 @@ export const TicketContextProvider: FC<PropsWithChildren> = ({ children }) => {
 
   const addCommentToTicket = async (values: { content: string; user: string }, projectId?: string) => {
     await handleAsyncCallback(async () => {
-      console.log('send1', currentTicket);
       if (!currentTicket || !projectId) return;
-      console.log('send');
+
       const { data } = await http.patch<{ ticket: Ticket; success: boolean }>(`/ticket/comment/${projectId}/${currentTicket._id}`, values);
 
       setCurrentTicket(data.ticket);

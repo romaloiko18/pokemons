@@ -18,7 +18,7 @@ axios.interceptors.response.use(
           window.location.replace('/app/login');
           toast('Unauthenticated');
         }
-        console.log('toast');
+
         toast(data.error);
 
         return Promise.reject(error.response.data);
