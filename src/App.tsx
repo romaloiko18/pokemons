@@ -22,8 +22,11 @@ function App() {
         <Layout>
           <Routes>
             <Route path="/" element={<Main />} />
+
             <Route path="/projects" element={<Projects />} />
+
             <Route path="/projects/:projectId" element={<Project />} />
+
             <Route path="/projects/:projectId/:ticketId" element={<Ticket />} />
 
             <Route path="*" element={<div> Not found </div>} />
@@ -34,6 +37,8 @@ function App() {
           <Route path="/signin" element={<SignIn />} />
 
           <Route path="/signup" element={<Signup />} />
+
+          <Route path="*" element={<div> Not found </div>} />
         </Routes>
       )}
 

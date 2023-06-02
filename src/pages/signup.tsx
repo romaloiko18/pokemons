@@ -5,6 +5,7 @@ import { http } from '../services/api';
 import { authService } from '../services/auth';
 import { useAuth } from '../hooks/useAuth';
 import { Button } from 'react-bootstrap';
+import { toast } from 'react-toastify';
 
 function SignUp() {
   const [email, setEmail] = useState('');
@@ -19,6 +20,8 @@ function SignUp() {
     authService.setToken(data.token);
 
     navigate('/');
+
+    toast('Registration has been successful');
   };
 
   return (
@@ -47,7 +50,7 @@ function SignUp() {
                   wrapperClass="mb-4 w-100"
                   label="Password"
                   id="formControlLg"
-                  type="password"
+                  type="text"
                   size="lg"
                 />
 

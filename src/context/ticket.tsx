@@ -1,7 +1,7 @@
 import { createContext, FC, PropsWithChildren, useContext, useState } from 'react';
 import { http } from '../services/api';
 import { Ticket } from '../types/ticket';
-import ticket from '../pages/ticket';
+import { toast } from 'react-toastify';
 
 type TicketsContext = {
   tickets: Ticket[];
@@ -70,6 +70,8 @@ export const TicketContextProvider: FC<PropsWithChildren> = ({ children }) => {
       const { data } = await http.post<{ ticket: Ticket; success: boolean }>(`/ticket/${projectId}`, values);
 
       setTickets((prevState) => [...prevState, data.ticket]);
+
+      toast('Ticket has been added');
     });
   };
 
@@ -79,6 +81,10 @@ export const TicketContextProvider: FC<PropsWithChildren> = ({ children }) => {
       const { data } = await http.patch<{ ticket: Ticket; success: boolean }>(`/ticket/${projectId}/${currentTicket?._id}`, values);
 
       setCurrentTicket(data.ticket);
+
+      toast('Ticket has been updated');
+
+      fetchTickets(projectId);
     });
   };
 

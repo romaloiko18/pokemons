@@ -2,12 +2,15 @@ import React, { FC, PropsWithChildren } from 'react';
 import { UserContextProvider } from './user';
 import { ProjectContextProvider } from './project';
 import { ModalContextProvider } from './modal';
+import { TicketContextProvider } from './ticket';
 
 const AppContext: FC<PropsWithChildren> = ({ children }) => {
   return (
     <UserContextProvider>
       <ProjectContextProvider>
-        <ModalContextProvider>{children}</ModalContextProvider>
+        <TicketContextProvider>
+          <ModalContextProvider>{children}</ModalContextProvider>
+        </TicketContextProvider>
       </ProjectContextProvider>
     </UserContextProvider>
   );

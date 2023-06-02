@@ -6,6 +6,7 @@ import { useProjects } from '../../context/project';
 import { SelectOption } from '../../types/inputs';
 import Select from '../Select';
 import CloseButton from 'react-bootstrap/CloseButton';
+import { toast } from 'react-toastify';
 
 const TeamModal = () => {
   const { setIsTeamModalOpened, isTeamModalOpened } = useModal();
@@ -23,9 +24,9 @@ const TeamModal = () => {
   }, [currentProject?.contributors.length]);
 
   const handleAttachUserToProject = async () => {
-    await addNewContributor({ email });
-
-    setEmail('');
+    addNewContributor({ email }).then(() => {
+      setEmail('');
+    });
   };
 
   return (

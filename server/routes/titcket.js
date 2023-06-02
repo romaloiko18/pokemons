@@ -32,7 +32,10 @@ router.get('/:projectId/:ticketId', auth, async (req, res) => {
   try {
     if (!projectId || !ticketId) return res.status(404).send({ success: false, error: 'No parameters provided' });
 
-    const ticket = await Ticket.findOne({ _id: ticketId, project: projectId }).populate('comments.user');
+    const ticket = await Ticket.findOne({ _id: ticketId, project: projectId }).populate({
+      path: 'assignee comments.user',
+      select: '_id email name description status'
+    });
 
     if (!ticket) return res.status(404).send({ success: false, error: 'No ticket was found' });
 
@@ -75,9 +78,9 @@ router.patch('/:projectId/:ticketId', auth, async (req, res) => {
     await Ticket.findOneAndUpdate({ project: projectId, _id: ticketId }, { name, description, status, assignee }, { new: true });
 
     const ticket = await Ticket.findOne({ project: projectId, _id: ticketId }).populate({
-      path: 'assignee, comments',
+      path: 'assignee comments.user',
       select: '_id email name description status',
-      strictPopulate: false
+      strictPopulate: true
     });
 
     return res.status(201).send({ success: true, ticket });

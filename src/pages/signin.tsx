@@ -5,6 +5,7 @@ import { http } from '../services/api';
 import { authService } from '../services/auth';
 import { useAuth } from '../hooks/useAuth';
 import { Button } from 'react-bootstrap';
+import { toast } from 'react-toastify';
 
 function SignIn() {
   const [email, setEmail] = useState('');
@@ -20,6 +21,8 @@ function SignIn() {
     authService.setToken(data.token);
 
     navigate('/');
+
+    toast('Login has been successful');
   };
 
   return (

@@ -31,6 +31,7 @@ class AuthService {
 
   public async post(route: string, data: object) {
     const url: string = process.env.NEXT_PUBLIC_CALCULATOR_API || '';
+
     return await axios.post(`${url}${route}`, data, {
       headers: { ...this.headers.headers }
     });

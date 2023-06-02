@@ -1,7 +1,6 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import { Button, Container } from 'react-bootstrap';
 
-import { TicketContextProvider } from '../context/ticket';
 import { useModal } from '../context/modal';
 import TicketsList from '../components/TicketsList';
 import AddNewTicketModal from '../components/AddNewTicketModal';
@@ -27,7 +26,7 @@ function Project() {
   }, []);
 
   return (
-    <TicketContextProvider>
+    <>
       <Container>
         <div className="d-flex justify-content-between">
           <div className="w-100">
@@ -44,7 +43,7 @@ function Project() {
       <AddNewTicketModal />
 
       <TeamModal />
-    </TicketContextProvider>
+    </>
   );
 }
 

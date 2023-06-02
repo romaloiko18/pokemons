@@ -1,6 +1,7 @@
 import { createContext, FC, PropsWithChildren, useContext, useState } from 'react';
 import { http } from '../services/api';
 import { Project } from '../types/project';
+import { toast } from 'react-toastify';
 
 type ProjectsContext = {
   projects: Project[];
@@ -70,6 +71,8 @@ export const ProjectContextProvider: FC<PropsWithChildren> = ({ children }) => {
       const { data } = await http.post<{ project: Project; success: boolean }>(`/project`, values);
 
       setProjects((prevState) => [...prevState, data.project]);
+
+      toast('Project has been added');
     });
   };
 
@@ -80,6 +83,8 @@ export const ProjectContextProvider: FC<PropsWithChildren> = ({ children }) => {
       const { data } = await http.patch<{ project: Project; success: boolean; error?: string }>(`/project/${currentProject._id}`, values);
 
       setCurrentProject(data.ticket);
+
+      toast('Project has been updated');
     });
   };
 
@@ -90,6 +95,7 @@ export const ProjectContextProvider: FC<PropsWithChildren> = ({ children }) => {
       const { data } = await http.post<{ project: Project; success: boolean }>(`/project/${currentProject._id}/team`, values);
 
       setCurrentProject(data.project);
+      toast('User has been added to the team');
     });
   };
 
