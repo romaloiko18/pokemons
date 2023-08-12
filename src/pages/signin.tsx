@@ -16,12 +16,9 @@ function SignIn() {
   useAuth('/');
   const handleSignIn = async (e: any) => {
     e.preventDefault();
-
     const { data } = await http.post<{ success: boolean; token: string }>('/auth/signin', { email, password });
     authService.setToken(data.token);
-
     navigate('/');
-
     toast('Login has been successful');
   };
 

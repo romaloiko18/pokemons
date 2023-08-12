@@ -12,9 +12,7 @@ module.exports = async (req, res, next) => {
     }
 
     const token = req.headers.authorization.split(' ')[1];
-
     const decodedToken = JsonWebToken.verify(token, process.env.SECRET_JWT);
-
     const user = await User.findOne({ _id: decodedToken.id });
 
     if (!user) {
